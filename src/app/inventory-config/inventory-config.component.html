@@ -1,0 +1,155 @@
+<div class="page-container">
+    <div>
+        <h2 style="margin-left: 12px;">Inventory Settings</h2>
+        <div class="button-group">
+            <button class="button" mat-stroked-button color="primary" [routerLink]="['/inventory']">Inventory</button>
+            <button class="button" mat-raised-button [routerLink]="['/']"><mat-icon svgIcon="home"></mat-icon>Home</button>
+            <button class="button" mat-raised-button color="primary" (click)="showHideAddCategory('amount', true)">Edit Amounts</button>
+            <button class="button" mat-raised-button color="primary" (click)="showHideAddCategory('garnish', true)">Add Garnish</button>
+            <button class="button" mat-raised-button color="primary" (click)="showHideAddCategory('mixer', true)">Add Mixer</button>
+            <button class="button" mat-raised-button color="primary" (click)="showHideAddCategory('liquor', true)">Add Liquor</button>
+        </div>
+    </div>
+    <div class="body-container">
+        <div class="category-container">
+            <h3 class="heading">Liquor Categories</h3>
+            <div class="category">
+                <mat-list>
+                    <mat-list-item *ngFor="let item of liquorCategories">
+                        <mat-icon class="delete-icon" svgIcon="delete-forever" (click)="deleteLiquorCat(item)"></mat-icon>
+                        {{item.category}}
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+        <div class="category-container">
+            <h3 class="heading">Mixer Categories</h3>
+            <div class="category">
+                <mat-list>
+                    <mat-list-item *ngFor="let item of mixerCategories">
+                        <mat-icon class="delete-icon" svgIcon="delete-forever" (click)="deleteMixerCat(item)"></mat-icon>
+                        {{item.category}}
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+        <div class="category-container">
+            <h3 class="heading">Garnish Categories</h3>
+            <div class="category">
+                <mat-list>
+                    <mat-list-item *ngFor="let item of garnishCategories">
+                        <mat-icon class="delete-icon" svgIcon="delete-forever" (click)="deleteGarnishCat(item)"></mat-icon>
+                        {{item.category}}
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+        <div class="category-container">
+            <h3 class="heading">Amount Values</h3>
+            <div class="category">
+                <mat-list>
+                    <mat-list-item *ngFor="let item of amountValues">
+                        <mat-icon class="delete-icon" svgIcon="delete-forever" (click)="deleteAmountValue(item)"></mat-icon>
+                        {{item.value}}
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+        <div class="add-item" *ngIf="addLiquor">
+            <h4 class="add-category-header">Add Liquor Category</h4>
+            <form #liquorForm="ngForm">
+                <div class="form-fields">
+                    <mat-form-field>
+                        <input 
+                            class="cat-name"
+                            matInput
+                            placeholder="Category Name"
+                            [(ngModel)]="this.liquorToAdd.category"
+                            required
+                            name="l-cat-name"/>
+                    </mat-form-field>
+                </div>
+            </form>
+            <div class="add-div-buttons">
+                <button class="panel-button" mat-stroked-button color="accent" (click)="addCategory('liquor')">OK</button>
+                <button class="panel-button" mat-stroked-button color="primary" (click)="showHideAddCategory('liquor', false)">Cancel</button>
+            </div>
+        </div>
+        <div class="add-item" *ngIf="addMixer">
+            <h4 class="add-category-header">Add Mixer Category</h4>
+            <form #mixerForm="ngForm">
+                <div class="form-fields">
+                    <mat-form-field>
+                        <input 
+                            class="cat-name"
+                            matInput
+                            placeholder="Category Name"
+                            [(ngModel)]="this.mixerToAdd.category"
+                            required
+                            name="m-cat-name"/>
+                    </mat-form-field>
+                </div>
+            </form>
+            <div class="add-div-buttons">
+                <button class="panel-button" mat-stroked-button color="accent" (click)="addCategory('mixer')">OK</button>
+                <button class="panel-button" mat-stroked-button color="primary" (click)="showHideAddCategory('mixer', false)">Cancel</button>
+            </div>
+        </div>
+        <div class="add-item" *ngIf="addGarnish">
+            <h4 class="add-category-header">Add Garnish Category</h4>
+            <form #garnishForm="ngForm">
+                <div class="form-fields">
+                    <mat-form-field>
+                        <input 
+                            class="cat-name"
+                            matInput
+                            placeholder="Category Name"
+                            [(ngModel)]="this.garnishToAdd.category"
+                            required
+                            name="g-cat-name"/>
+                    </mat-form-field>
+                </div>
+            </form>
+            <div class="add-div-buttons">
+                <button class="panel-button" mat-stroked-button color="accent" (click)="addCategory('garnish')">OK</button>
+                <button class="panel-button" mat-stroked-button color="primary" (click)="showHideAddCategory('garnish', false)">Cancel</button>
+            </div>
+        </div>
+        <div class="add-amounts-container" *ngIf="addAmountValue">
+            <div class="add-item amounts">
+                <h4 class="add-category-header">Add Amount Value</h4>
+                <form #garnishForm="ngForm">
+                    <div class="form-fields">
+                        <mat-form-field>
+                            <input 
+                                class="amount-value"
+                                matInput
+                                placeholder="Amount Value name"
+                                [(ngModel)]="this.amountValueToAdd.Value"
+                                required
+                                name="amount-value"/>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <input 
+                                class="amount-order"
+                                matInput
+                                type="number"
+                                placeholder="Amount Value Order"
+                                [(ngModel)]="this.amountValueToAdd.ListOrder"
+                                required
+                                name="amount-order"/>
+                        </mat-form-field>
+                    </div>
+                </form>
+                <div class="add-div-buttons">
+                    <button class="panel-button" mat-stroked-button color="accent" (click)="addCategory('amount')">OK</button>
+                    <button class="panel-button" mat-stroked-button color="primary" (click)="showHideAddCategory('amount', false)">Cancel</button>
+                </div>
+            </div>
+            <!-- <div class="amount-value-notes" *ngIf="addAmountValue">
+                Amount Value Name should be easy to think about. Something like Full, Needed, Empty, etc.<br /><br />
+                The Amount Value Order is the order in which the Names appear in any dropdown and on the Amount Values list on this page. e.g. 0 = first, 5 = last
+            </div> -->
+        </div>
+    </div>
+</div>

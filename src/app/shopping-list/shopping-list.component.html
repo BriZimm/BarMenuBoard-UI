@@ -1,0 +1,39 @@
+<div class="page-container">
+    <div class="header-row">
+        <h2 class="header-text">Shopping List</h2>
+        <div class="button-group">
+            <button class="new-button" mat-raised-button [routerLink]="['/']"><mat-icon svgIcon="home"></mat-icon>Home</button>
+            <button class="new-button" mat-raised-button [routerLink]="['/inventory']"><mat-icon svgIcon="alpha-i-box"></mat-icon> Inventory</button>
+        </div>
+    </div>
+    <div *ngIf="shoppingListLoaded && !shoppingList">
+        You do not need anything replaced from your current inventory.
+    </div>
+    <table
+        *ngIf="shoppingListLoaded && shoppingList && liquorCategories && mixerCategories && garnishCategories && amountValues && shoppingList.length > 0"
+        mat-table
+        matSort
+        [dataSource]="shoppingList"
+        class="shopping-list-table">
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Item Name </mat-header-cell>
+            <mat-cell *matCellDef="let item" class="cell"> {{item.name}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="category">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Category </mat-header-cell>
+            <mat-cell *matCellDef="let item" class="cell"> {{getIngredientType(item)}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Amount Remaining </mat-header-cell>
+            <mat-cell *matCellDef="let item" class="cell"> Currently {{getAmountValue(item)}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
+            <mat-cell *matCellDef="let item" class="action-cell"> Actions </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </table>
+</div>
+

@@ -1,0 +1,133 @@
+<div class="example-container">
+    <form #recipeForm="ngForm"> <!--  (ngSubmit)="save(recipeForm.value)"> -->
+        <h2>{{recipe.id ? 'Edit' : 'Add'}} Recipe</h2>
+            <mat-checkbox class="checkbox" [(ngModel)]="recipe.currentSpecial" (click)="updateSpecialsCount()" name="recipe-special">
+                <span *ngIf="!recipe.currentSpecial">Make a Special ({{this.specialsCount}} of 5 max)</span>
+                <span *ngIf="recipe.currentSpecial">Remove from Specials ({{this.specialsCount}} of 5 max)</span>
+            </mat-checkbox>
+            <input type="hidden" name="recipe-id" [(ngModel)]="recipe.id">
+            <div class="form-fields">
+                <mat-form-field>
+                    <input 
+                        class="recipe-name"
+                        matInput
+                        placeholder="Recipe Name"
+                        [(ngModel)]="recipe.name"
+                        required
+                        name="recipe-name"
+                        [ngModelOptions]="{standalone: true}" />
+                </mat-form-field>
+            </div>
+            <div class="right-side">
+                <img *ngIf="recipe.image " class="image" alt="Recipe Image" [src]="getImageURL()"/>
+                <div *ngIf="this.recipeImageExists" class="image-buttons">
+                    <button mat-flat-button color="warn" (click)="deleteImage()">Delete Image</button>
+                </div>
+                <div *ngIf="!this.recipeImageExists"  class="image-buttons">
+                    <input #imageInput hidden="true" type="file" onclick="this.value=null" (change)="uploadimage($event, recipe)" accept=".png,.jpg,.jpeg,.gif"/>
+                    <button mat-flat-button color="primary" (click)="imageInput.click()">Choose Image</button>
+                    <p class="dimensions">Best image dimensions are 300x300px</p>
+                </div>
+            </div>
+            <div>
+                <div class="form-fields-sm">
+                    <mat-form-field>
+                        <mat-label>Type</mat-label>
+                        <mat-select [(ngModel)]="recipe.type" placeholder="Choose a Cocktail Type" required name="recipe-type">
+                            <mat-option [value]="0">Sparkling</mat-option>
+                            <mat-option [value]="1">Classic</mat-option>
+                            <mat-option [value]="2">Creamy</mat-option>
+                            <mat-option [value]="3">Frozen</mat-option>
+                            <mat-option [value]="4">Hot</mat-option>
+                            <mat-option [value]="5">Long Drink</mat-option>
+                            <mat-option [value]="6">Martini</mat-option>
+                            <mat-option [value]="7">Non-Alcoholic</mat-option>
+                            <mat-option [value]="8">Shooter</mat-option>
+                            <mat-option [value]="9">Short</mat-option>
+                            <mat-option [value]="10">Smoothie</mat-option>
+                            <mat-option [value]="11">Tropical</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="form-fields-sm">
+                    <mat-form-field>
+                        <mat-label>Glass</mat-label>
+                        <mat-select [(ngModel)]="recipe.glass" placeholder="Choose a Glass" required name="recipe-glass">
+                            <mat-option [value]="0">Beer Mug</mat-option>
+                            <mat-option [value]="1">Brandy Snifter</mat-option>
+                            <mat-option [value]="2">Champagne Flute</mat-option>
+                            <mat-option [value]="3">Collins</mat-option>
+                            <mat-option [value]="4">Cordial</mat-option>
+                            <mat-option [value]="5">Highball</mat-option>
+                            <mat-option [value]="6">Hurricane</mat-option>
+                            <mat-option [value]="7">Irish Coffee</mat-option>
+                            <mat-option [value]="8">Margarita</mat-option>
+                            <mat-option [value]="9">Martini</mat-option>
+                            <mat-option [value]="10">Rocks Glass</mat-option>
+                            <mat-option [value]="11">Pilsner</mat-option>
+                            <mat-option [value]="12">Pitcher</mat-option>
+                            <mat-option [value]="13">Punch Bowl</mat-option>
+                            <mat-option [value]="14">Shot</mat-option>
+                            <mat-option [value]="15">Wine</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="form-fields-sm">
+                <mat-form-field>
+                    <mat-label>Served</mat-label>
+                    <mat-select [(ngModel)]="recipe.served" placeholder="Choose how a drink is served" required name="recipe-served">
+                        <mat-option [value]="0">Blended</mat-option>
+                        <mat-option [value]="1">Layered</mat-option>
+                        <mat-option [value]="2">Mixed</mat-option>
+                        <mat-option [value]="3">Shaken</mat-option>
+                        <mat-option [value]="4">Neat</mat-option>
+                        <mat-option [value]="5">On The Rocks</mat-option>
+                        <mat-option [value]="6">Stirred</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-fields-sm">
+                <mat-form-field>
+                    <mat-label>Strength</mat-label>
+                    <mat-select [(ngModel)]="recipe.strength" placeholder="Choose a drink strength" required name="recipe-strength">
+                        <mat-option [value]="0">None</mat-option>
+                        <mat-option [value]="1">Mild</mat-option>
+                        <mat-option [value]="2">Medium</mat-option>
+                        <mat-option [value]="3">Strong</mat-option>
+                        <mat-option [value]="4">Very Strong</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-fields-sm">
+                <mat-form-field>
+                    <input matInput placeholder="Similar Tastes" [(ngModel)]="recipe.similarTastes" required name="similarTastes">
+                </mat-form-field>
+            </div>
+            <div class="form-fields">
+                <mat-form-field>
+                    <textarea class="large-text-area" matInput placeholder="Description" [(ngModel)]="recipe.description" required name="recipe-description"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-fields">
+                <mat-form-field>
+                    <textarea class="large-text-area" matInput placeholder="Ingredients" [(ngModel)]="recipe.ingredients" required name="ingredients"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-fields">
+                <mat-form-field>
+                    <textarea class="large-text-area" matInput placeholder="Instructions" [(ngModel)]="recipe.instructions" required name="instructions"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-fields">
+                <mat-form-field>
+                    <input matInput placeholder="Garnish" [(ngModel)]="recipe.garnish" required name="garnish">
+                </mat-form-field>
+            </div>
+        <div class="form-actions">
+            <button class="form-buttons" mat-raised-button color="primary" (click)="save(recipe)" [disabled]="!recipeForm.form.valid">Save Recipe</button>
+            <button class="form-buttons" mat-raised-button color="warn" (click)="openConfirmDialog()" *ngIf="recipe.id" type="button">Delete Recipe</button>
+            <a class="form-buttons" mat-raised-button color="secondary" routerLink="/recipe-list">Cancel</a>
+        </div>
+    </form>
+</div>

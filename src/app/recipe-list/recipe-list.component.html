@@ -1,0 +1,37 @@
+<h1 class="page-title">Recipe List</h1>
+<button class="add-button" mat-stroked-button color="primary" [routerLink]="['/specials-list']">View Menu Board</button>
+<button class="add-button" mat-raised-button color="primary" [routerLink]="['/recipe-add']">Add Recipe</button>
+<button class="add-button" mat-raised-button color="basic" [routerLink]="['/']">Home</button>
+<mat-spinner class="spinner" *ngIf="!recipeList"></mat-spinner>
+<div class="recipe-list-container">
+    <mat-grid-list 
+        *ngIf="recipeList" 
+        [responsive]="responsive"
+        (responsiveColsChange)="cols = $event"
+        rowHeight="500px"
+        gutterSize="5px">
+        <mat-grid-tile *ngFor="let recipe of recipeList">
+            <mat-card class="recipe-cards">
+                <mat-card-title-group>
+                    <mat-card-title>{{recipe.name}}</mat-card-title>
+                    <mat-card-subtitle><span class="bold">Cocktail Type: </span>{{Enums.Type[recipe.type]}}</mat-card-subtitle>
+                </mat-card-title-group>
+                <div class="img-container">
+                    <img class="image" mat-card-image src="https://barmenuboardblob.blob.core.windows.net/recipe-images/{{recipe.image}}">
+                </div>
+                
+                <mat-card-content>
+                    <p><span class="bold">Description:</span> {{recipe.description | slice:0:80}} ...</p>
+                    <p><span class="bold">Served:</span> {{Enums.Served[recipe.served]}}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <a class="small-button" mat-raised-button color="primary" [routerLink]="['/recipe-edit', recipe.id]">Edit</a>
+                    <a *ngIf="recipe.currentSpecial" class="small-button" mat-raised-button color="basic" (click)="removeSpecial(recipe)">Remove from Specials</a>
+                    <a *ngIf="!recipe.currentSpecial" class="small-button" mat-raised-button color="basic" (click)="addSpecial(recipe)">Add to Specials</a>
+                    <img *ngIf="recipe.currentSpecial" class="special-icon" src="../../assets/heart.png" title="Currently a Special"/>
+                    <img *ngIf="!recipe.currentSpecial" class="no-special-icon" src="../../assets/transparent.png"/>
+                </mat-card-actions>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

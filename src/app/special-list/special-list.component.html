@@ -1,0 +1,64 @@
+<div class="less-than-five" *ngIf="specials && specials.length < 5">
+    <p>There <span *ngIf="specials.length === 1">is</span> <span *ngIf="specials.length < 5 && specials.length > 1">are</span> currently <span *ngIf="specials.length < 5 && specials.length > 0">only</span>
+        {{specials.length}} selected Special<span *ngIf="specials.length < 5 && specials.length > 1">s</span> for today. You must select 5 Specials from the Recipe List to view the menu board as intended.</p>
+    <button class="recipe-list-button" mat-raised-button color="primary" [routerLink]="['/recipe-list']"><mat-icon svgIcon="format-list-checkbox"></mat-icon> Recipe List</button>
+</div>
+<div *ngIf="styles && specials && specials.length === 5">
+    <div *ngIf="styles && styles.showBanner && specials && specials.length === 5"
+        class="corner-ribbon top-right sticky text"
+        [ngStyle]="{'background': getBannerColor(), 'color': getBannerTextColor()}"
+        ngClass="{'usa' : styles.bannerColor === 'usa', 'hny' : styles.bannerColor === 'hny', 'xmas' : styles.bannerColor === 'xmas'}">
+        {{styles.bannerText}}
+    </div>
+    
+    <div class="page" 
+        [ngStyle]="{'background': getPageBackground()}"
+        style="text-align:center">
+    <div class="headerContainer">
+        <div class="headerImage" [ngStyle]="{'background-image': getPageHeaderImage()}">
+        </div>
+        <div class="headerRight">
+            <div class="headerText" [ngStyle]="{'color': getTitleTextColor()}">
+                {{styles.titleText}}
+            </div>
+        </div>
+    </div>
+    <div *ngIf="specials && specials.length === 5">
+        <div class="container" [ngStyle]="{'border': getRecipeBorderColor(), 'background': getRecipeBackground()}" *ngFor="let special of specials">
+            <div class="itemImage">
+            <img [ngStyle]="{'border': getRecipeImageBorderColor()}"
+                 src='https://barmenuboardblob.blob.core.windows.net/recipe-images/{{special.image}}'>
+            </div>
+            <div class="itemDetails">
+                <p class="itemTitle" [ngStyle]="{'color': getRecipeTitleColor()}">{{special.name}}</p>
+                <p class="label" [ngStyle]="{'color': getRecipeDescriptionTextColor()}">Description</p>
+                <span class="description-text" [ngStyle]="{'color': getRecipeDesciptionTextColor()}">{{special.description}}</span>
+            </div>
+            <div class="itemProfile" [ngStyle]="{'border-left': getRecipeBorderColor(), 'background': getRecipeProfileBackground()}">
+            <table>
+                <tr><th [ngStyle]="{'color': getRecipeProfileLabelColor()}">Drink Type:</th>
+                    <td [ngStyle]="{'color': getRecipeProfileItemColor()}">{{Enums.Type[special.type]}}</td>
+                </tr>
+                <tr><th [ngStyle]="{'color': getRecipeProfileLabelColor()}">Glass Type:</th>
+                    <td [ngStyle]="{'color': getRecipeProfileItemColor()}">{{Enums.Glass[special.glass]}}</td>
+                </tr>
+                <tr><th [ngStyle]="{'color': getRecipeProfileLabelColor()}">Served:</th>
+                    <td [ngStyle]="{'color': getRecipeProfileItemColor()}">{{Enums.Served[special.served]}}</td>
+                </tr>
+                <tr><th [ngStyle]="{'color': getRecipeProfileLabelColor()}">Garnish:</th>
+                    <td [ngStyle]="{'color': getRecipeProfileItemColor()}">{{special.garnish}}</td>
+                </tr>
+                <tr><th [ngStyle]="{'color': getRecipeProfileLabelColor()}">Tastes Like:</th>
+                    <td [ngStyle]="{'color': getRecipeProfileItemColor()}">{{special.similarTastes}}</td>
+                </tr>
+                <tr><th [ngStyle]="{'color': getRecipeProfileLabelColor()}">Strength:</th>
+                    <td [ngStyle]="{'color': getRecipeProfileItemColor()}">{{Enums.Strength[special.strength]}}</td>
+                </tr>
+            </table>
+            </div>
+        </div>
+        <div class="footer"></div>
+        </div>
+</div>
+
+

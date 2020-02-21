@@ -1,0 +1,189 @@
+<div class="page-container">
+    <div class="header-row">
+        <h2 class="header-text">Inventory</h2>
+        <div class="button-group">
+            <button class="new-button" mat-raised-button [routerLink]="['/']"><mat-icon svgIcon="home"></mat-icon>Home</button>
+            <button class="new-button" mat-raised-button [routerLink]="['/shopping-list']"><mat-icon svgIcon="cart-outline"></mat-icon>Shopping List</button>
+            <button class="new-button" mat-raised-button color="accent" [routerLink]="['/inventory-config']"><mat-icon svgIcon="cog-outline"></mat-icon> Settings</button>
+            <button class="new-button" mat-raised-button color="primary" (click)="addNewItem()"><mat-icon svgIcon="plus-circle"></mat-icon> Add Item</button>
+        </div>
+    </div>
+    <div class="tab-edit-container">
+        <div class="left">
+            <mat-tab-group 
+                class="tabs-container">
+                <mat-tab label="Alcohol" *ngIf="liquorCategories">
+                    <mat-accordion>
+                        <mat-expansion-panel *ngFor="let alcohol of alcohols">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{alcohol.name}} : {{getCategoryName('liquor', alcohol.liquorType)}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span class="inventory-date">Last Inventoried: {{alcohol.updated  | date:'medium':'-12'}}</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                          <form #editLiquorForm="ngForm">
+                            <mat-form-field>
+                                <mat-label>Remaining Amount</mat-label>
+                                <mat-select matNativeControl [(ngModel)]="alcohol.amount" name="amount">
+                                <mat-option *ngFor="let amount of amountValues" [value]="amount.listOrder">
+                                    {{amount.value}}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                        <div class="item-buttons">
+                            <button class="item-button" mat-raised-button color="secondary" (click)="updateitem(alcohol)"><mat-icon svgIcon="arrow-up-bold-box"></mat-icon> Update</button>
+                            <button class="item-button" mat-raised-button color="warn" (click)="deleteItem(alcohol)"><mat-icon svgIcon="delete-forever"></mat-icon> Remove Item</button>
+                        </div>
+                        </mat-expansion-panel>
+                      </mat-accordion>
+                </mat-tab>
+                <mat-tab label="Mixers" *ngIf="mixerCategories">
+                    <mat-accordion>
+                        <mat-expansion-panel *ngFor="let mixer of mixers">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{mixer.name}} : {{getCategoryName('mixer', mixer.mixerType)}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span class="inventory-date">Last Inventoried: {{mixer.updated  | date:'medium':'-12'}}</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                          <form #editMixerForm="ngForm">
+                            <mat-form-field>
+                                <mat-label>Remaining Amount</mat-label>
+                                <mat-select matNativeControl [(ngModel)]="mixer.amount" name="amount">
+                                <mat-option *ngFor="let amount of amountValues" [value]="amount.listOrder">
+                                    {{amount.value}}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                        <div class="item-buttons">
+                            <button class="item-button" mat-raised-button color="secondary" (click)="updateitem(mixer)"><mat-icon svgIcon="arrow-up-bold-box"></mat-icon> Update</button>
+                            <button class="item-button" mat-raised-button color="warn" (click)="deleteItem(mixer)"><mat-icon svgIcon="delete-forever"></mat-icon> Remove Item</button>
+                        </div>
+                        </mat-expansion-panel>
+                      </mat-accordion>
+                </mat-tab>
+                <mat-tab label="Garnishes" *ngIf="garnishCategories">
+                    <mat-accordion>
+                        <mat-expansion-panel *ngFor="let garnish of garnishes">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{garnish.name}} : {{getCategoryName('garnish', garnish.garnishType)}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span class="inventory-date">Last Inventoried: {{garnish.updated  | date:'medium':'-12'}}</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                          <form #editGarnishForm="ngForm">
+                            <mat-form-field>
+                                <mat-label>Remaining Amount</mat-label>
+                                <mat-select matNativeControl [(ngModel)]="garnish.amount" name="amount">
+                                <mat-option *ngFor="let amount of amountValues" [value]="amount.listOrder">
+                                    {{amount.value}}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                        <div class="item-buttons">
+                            <button class="item-button" mat-raised-button color="secondary" (click)="updateitem(garnish)"><mat-icon svgIcon="arrow-up-bold-box"></mat-icon> Update</button>
+                            <button class="item-button" mat-raised-button color="warn" (click)="deleteItem(garnish)"><mat-icon svgIcon="delete-forever"></mat-icon> Remove Item</button>
+                        </div>
+                        </mat-expansion-panel>
+                      </mat-accordion>
+            
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <div class="right" [ngClass]="{'add-item': addItem, 'hide-add-item': !addItem}">
+            <div class="add-item-container">
+                <form #inventoryForm="ngForm" *ngIf="item">
+                    <div class="header-container">
+                        <h3>Add New Inventory Item</h3>
+                    </div>
+                    <div class="column-container">
+                        <div class="left-column">
+                            <div class="form-fields">
+                                <mat-form-field>
+                                    <input 
+                                        name="name"
+                                        class="inventory-name"
+                                        matInput
+                                        placeholder="Item Name"
+                                        [(ngModel)]="item.name"
+                                        required/>
+                                </mat-form-field>
+                            </div>
+                            <mat-radio-group
+                                aria-labelledby="radio-group-label"
+                                class="radio-group"
+                                name="ingreident-type-radio"
+                                [(ngModel)]="item.ingredientType">
+                                <mat-radio-button class="radio-button" (click)="clearOtherTypeValues(Enums.IngredientType.Alcohol)" [value]="Enums.IngredientType.Alcohol">Alcohol</mat-radio-button>
+                                <mat-radio-button class="radio-button" (click)="clearOtherTypeValues(Enums.IngredientType.Mixer)" [value]="Enums.IngredientType.Mixer">Mixer</mat-radio-button>
+                                <mat-radio-button class="radio-button" (click)="clearOtherTypeValues(Enums.IngredientType.Garnish)" [value]="Enums.IngredientType.Garnish">Garnish</mat-radio-button>
+                            </mat-radio-group>
+                            <div *ngIf="item.ingredientType && item.ingredientType === Enums.IngredientType.Alcohol">
+                                <div class="form-fields">
+                                    <mat-form-field>
+                                        <mat-label>Alcohol Type</mat-label>
+                                        <mat-select [(ngModel)]="item.liquorType" name="item-liquor-type">
+                                          <mat-option *ngFor="let liquor of liquorCategories" [value]="liquor.id">
+                                            {{liquor.category}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div *ngIf="item.ingredientType && item.ingredientType === Enums.IngredientType.Mixer">
+                                <div class="form-fields">
+                                    <mat-form-field>
+                                        <mat-label>Mixer Type</mat-label>
+                                        <mat-select [(ngModel)]="item.mixerType" name="item-mixer-type">
+                                          <mat-option *ngFor="let mixer of mixerCategories" [value]="mixer.id">
+                                            {{mixer.category}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div *ngIf="item.ingredientType && item.ingredientType === Enums.IngredientType.Garnish">
+                                <div class="form-fields">
+                                    <mat-form-field>
+                                        <mat-label>Garnish Type</mat-label>
+                                        <mat-select [(ngModel)]="item.garnishType" name="item-garnish-type">
+                                          <mat-option *ngFor="let garnish of garnishCategories" [value]="garnish.id">
+                                            {{garnish.category}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-fields">
+                                    <mat-form-field>
+                                        <mat-label>Amount</mat-label>
+                                        <mat-select [(ngModel)]="item.amount" name="amount">
+                                          <mat-option *ngFor="let amount of amountValues" [value]="amount.listOrder">
+                                            {{amount.value}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <button class="buttons" mat-raised-button color="secondary" (click)="hideNewItem()">Cancel</button>
+            <button class="buttons" mat-raised-button color="primary" (click)="saveItem(true)">Add and Close</button>
+            <button class="buttons" mat-raised-button color="primary" (click)="saveItem(false)">Add Another</button>
+        </div>
+        
+    </div>
+</div>
+

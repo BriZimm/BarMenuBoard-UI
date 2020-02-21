@@ -1,0 +1,29 @@
+export default class BoardStyle {
+    id: number;
+    name: string;
+    updated: Date;
+    active: boolean;
+    titleText: string;
+    titleTextColor: string;
+    showBanner: boolean;
+    bannerText?: string;
+    bannerTextColor?: string;
+    bannerColor?: string;
+    headerImage: string;
+    mainBackgroundImage?: string;
+    mainBackgroundColor?: string;
+    useMainBackgroundColor: boolean;
+    recipeBackgroundImage?: string;
+    recipeBackgroundColor?: string;
+    useRecipeBackgroundColor: boolean;
+    recipeProfileBackgroundColor?: string;
+    recipeProfileBackgroundImage?: string;
+    useRecipeProfileBackgroundColor: boolean;
+    recipeBorderColor: string;
+    recipeHeaderColor: string;
+    recipeTextColor: string;
+    recipeImageBorderColor: string;
+    recipeDescriptionHeaderTextColor: string;
+    recipeProfileLabelColor: string;
+    recipeProfileItemColor: string;
+}

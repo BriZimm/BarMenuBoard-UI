@@ -1,0 +1,88 @@
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.page-title {
+    margin-left: 12px;
+}
+
+.recipe-list-container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.mat-grid-tile .mat-figure {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+mat-card-content {
+    font-size: 12px;
+    padding-bottom: 0;
+    margin-bottom: 2px;
+    height: 68px;
+}
+
+mat-card-title {
+    font-weight: 500;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.add-button {
+    float: right;
+    top: -60px;
+    margin-right: 10px;
+}
+
+.mat-list-base {
+    padding-top: 100px;
+}
+
+.small-button {
+    font-size: 12px;
+}
+
+.recipe-cards {
+    background: #fffddb;
+    border: 1px solid #ffe48a;
+    height: 460px;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+}
+
+.img-container {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.image {
+    border: 1px solid black;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    max-width: 270px;
+    max-height: 270px;
+}
+
+.special-icon {
+    position: relative;
+    top: 11px;
+    left: 6px;
+    height: 30px;
+    width: 30px;
+    border: none;
+}
+
+.no-special-icon {
+    position: relative;
+    top: 11px;
+    left: 40px;
+    height: 30px;
+    width: 30px;
+    border: none;
+}
